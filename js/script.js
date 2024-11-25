@@ -33,3 +33,55 @@ function kastaTärning() {
         omgångPoängEl.innerText = `Omgångens poäng: ${omgångPoäng}`;
     }
 }
+
+// Funktion för att frysa poäng
+function frysPoäng() {
+    totalPoäng += omgångPoäng;
+    omgångPoäng = 0;
+    totalPoängEl.innerText = `Total poäng: ${totalPoäng}`;
+    omgångPoängEl.innerText = `Omgångens poäng: ${omgångPoäng}`;
+    avslutaOmgång();
+
+    if (totalPoäng >= 100) {
+        popupEl.innerText = `Grattis ${spelarensNamn}! Du vann på ${omgångar} omgångar.`;
+        setTimeout(resetGame, 3000); // Starta om spelet efter 3 sekunder
+    }
+}
+
+// Funktion för att avsluta omgången
+function avslutaOmgång() {
+    omgångar++;
+    omgångarEl.innerText = `Antal omgångar: ${omgångar}`;
+}
+
+// Funktion för att återställa spelet
+function resetGame() {
+    totalPoäng = 0;
+    omgångPoäng = 0;
+    omgångar = 0;
+    totalPoängEl.innerText = `Total poäng: ${totalPoäng}`;
+    omgångPoängEl.innerText = `Omgångens poäng: ${omgångPoäng}`;
+    omgångarEl.innerText = `Antal omgångar: ${omgångar}`;
+    tärningEl.innerText = '';
+    popupEl.innerText = 'Spelet är återställt!';
+}
+
+// Funktion för att spara spelarens namn
+namnForm.addEventListener('submit', (e) => {
+    e.preventDefault(); // Förhindra att formuläret skickas och sidan laddas om
+    spelarensNamn = namnInput.value.trim(); // Hämta spelarens namn från inputfältet
+    if (spelarensNamn !== "") {
+        popupEl.innerText = `Spelarens namn är: ${spelarensNamn}`;
+    } else {
+        popupEl.innerText = "Ange ett namn för att börja spela!";
+    }
+    namnForm.reset(); // Återställ formuläret efter namn är sparat
+});
+
+// Lägg till event listeners för knapparna
+kastaBtn.addEventListener('click', kastaTärning);
+frysBtn.addEventListener('click', frysPoäng);
+resetBtn.addEventListener('click', resetGame);
+
+// Starta spelet
+resetGame();
